@@ -25,3 +25,7 @@ body {
 .movingCell {
     background-color: #0000FF;
 }
+
+.fixedCell {
+    background-color: #00FF00;
+}
