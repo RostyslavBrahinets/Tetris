@@ -21,3 +21,7 @@ body {
     border: 1px solid #FFFFFF;
     display: inline-block;
 }
+
+.movingCell {
+    background-color: #0000FF;
+}
