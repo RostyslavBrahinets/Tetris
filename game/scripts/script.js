@@ -45,7 +45,7 @@ function canFigureMoveDown() {
     for (let y = 0; y < fieldOfGame.length; y++) {
         for (let x = 0; x < fieldOfGame[y].length; x++) {
             if (fieldOfGame[y][x] === 1) {
-                if (y === fieldOfGame.length - 1) {
+                if (y === fieldOfGame.length - 1 || fieldOfGame[y + 1][x] === -1) {
                     return false;
                 }
             }
@@ -65,7 +65,22 @@ function moveFigureDown() {
                 }
             }
         }
+    } else {
+        fixFigure();
     }
+}
+
+function fixFigure() {
+    for (let y = 0; y < fieldOfGame.length; y++) {
+        for (let x = 0; x < fieldOfGame[y].length; x++) {
+            if (fieldOfGame[y][x] === 1) {
+                fieldOfGame[y][x] = -1;
+            }
+        }
+    }
+
+    fieldOfGame[0] = [0, 0, 0, 0, 1, 0, 0, 0, 0, 0];
+    fieldOfGame[1] = [0, 0, 0, 1, 1, 1, 0, 0, 0, 0];
 }
 
 function startGame() {
