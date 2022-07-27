@@ -18,12 +18,12 @@ let fieldOfGame = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    [0, 0, 0, 0, -1, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, -1, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, -1, -1, 0, 0, 0, 0]
 ];
 
-let gameSpeed = 700;
+let gameSpeed = 400;
 
 function drawField() {
     let mainInnerHTML = "";
@@ -31,6 +31,8 @@ function drawField() {
         for (let x = 0; x < fieldOfGame[y].length; x++) {
             if (fieldOfGame[y][x] === 1) {
                 mainInnerHTML += "<div class='cell movingCell'></div>";
+            } else if (fieldOfGame[y][x] === -1) {
+                mainInnerHTML += "<div class='cell fixedCell'></div>";
             } else {
                 mainInnerHTML += "<div class='cell'></div>";
             }
