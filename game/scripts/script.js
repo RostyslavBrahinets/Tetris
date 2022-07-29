@@ -148,6 +148,8 @@ document.onkeydown = (event) => {
         moveFigureLeft();
     } else if (event.keyCode === 39) {
         moveFigureRight();
+    } else if (event.keyCode === 40) {
+        moveFigureDown();
     }
 }
 
