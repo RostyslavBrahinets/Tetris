@@ -41,6 +41,33 @@ function drawField() {
     main.innerHTML = mainInnerHTML;
 }
 
+function canFigureMoveLeft() {
+    for (let y = 0; y < fieldOfGame.length; y++) {
+        for (let x = 0; x < fieldOfGame[y].length; x++) {
+            if (fieldOfGame[y][x] === 1) {
+                if (x === 0 || fieldOfGame[y][x - 1] === -1) {
+                    return false;
+                }
+            }
+        }
+    }
+
+    return true;
+}
+
+function moveFigureLeft() {
+    if (canFigureMoveLeft()) {
+        for (let y = fieldOfGame.length - 1; y >= 0; y--) {
+            for (let x = 0; x < fieldOfGame[y].length; x++) {
+                if (fieldOfGame[y][x] === 1) {
+                    fieldOfGame[y][x - 1] = 1;
+                    fieldOfGame[y][x] = 0;
+                }
+            }
+        }
+    }
+}
+
 function canFigureMoveDown() {
     for (let y = 0; y < fieldOfGame.length; y++) {
         for (let x = 0; x < fieldOfGame[y].length; x++) {
@@ -89,5 +116,11 @@ function startGame() {
     setTimeout(startGame, gameSpeed);
 }
 
-drawField()
+document.onkeydown = (event) => {
+    if (event.keyCode === 37) {
+        moveFigureLeft();
+    }
+}
+
+drawField();
 setTimeout(startGame, gameSpeed);
