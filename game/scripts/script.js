@@ -18,8 +18,8 @@ let fieldOfGame = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, -1, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, -1, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, -1, -1, 0, 0, 0, 0],
     [0, 0, 0, 0, -1, -1, 0, 0, 0, 0]
 ];
 
@@ -133,8 +133,30 @@ function fixFigure() {
         }
     }
 
-    fieldOfGame[0] = [0, 0, 0, 0, 1, 0, 0, 0, 0, 0];
-    fieldOfGame[1] = [0, 0, 0, 1, 1, 1, 0, 0, 0, 0];
+    removeFullLines();
+
+    fieldOfGame[0] = [0, 0, 0, 0, 1, 1, 0, 0, 0, 0];
+    fieldOfGame[1] = [0, 0, 0, 0, 1, 1, 0, 0, 0, 0];
+}
+
+function removeFullLines() {
+    let canRemoveLine = true;
+
+    for (let y = 0; y < fieldOfGame.length; y++) {
+        for (let x = 0; x < fieldOfGame[y].length; x++) {
+            if (fieldOfGame[y][x] !== -1) {
+                canRemoveLine = false;
+                break;
+            }
+        }
+
+        if (canRemoveLine) {
+            fieldOfGame.splice(y, 1);
+            fieldOfGame.splice(0, 0, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+        }
+
+        canRemoveLine = true;
+    }
 }
 
 function startGame() {
@@ -151,6 +173,8 @@ document.onkeydown = (event) => {
     } else if (event.keyCode === 40) {
         moveFigureDown();
     }
+
+    drawField();
 }
 
 drawField();
