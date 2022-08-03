@@ -1,8 +1,6 @@
 let main = document.querySelector(".main");
 
 let fieldOfGame = [
-    [0, 0, 0, 0, 1, 1, 0, 0, 0, 0],
-    [0, 0, 0, 0, 1, 1, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -19,11 +17,23 @@ let fieldOfGame = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, -1, -1, 0, 0, 0, 0],
-    [0, 0, 0, 0, -1, -1, 0, 0, 0, 0]
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 ];
 
 let gameSpeed = 400;
+
+let activeFigure = {
+    x: 0,
+    y: 0,
+    shape: [
+        [1, 1, 1],
+        [0, 1, 0],
+        [0, 0, 0]
+    ]
+};
 
 function drawField() {
     let mainInnerHTML = "";
@@ -41,87 +51,45 @@ function drawField() {
     main.innerHTML = mainInnerHTML;
 }
 
-function canFigureMoveLeft() {
+function removePreviousActiveFigure() {
     for (let y = 0; y < fieldOfGame.length; y++) {
         for (let x = 0; x < fieldOfGame[y].length; x++) {
             if (fieldOfGame[y][x] === 1) {
-                if (x === 0 || fieldOfGame[y][x - 1] === -1) {
-                    return false;
-                }
-            }
-        }
-    }
-
-    return true;
-}
-
-function moveFigureLeft() {
-    if (canFigureMoveLeft()) {
-        for (let y = fieldOfGame.length - 1; y >= 0; y--) {
-            for (let x = 0; x < fieldOfGame[y].length; x++) {
-                if (fieldOfGame[y][x] === 1) {
-                    fieldOfGame[y][x - 1] = 1;
-                    fieldOfGame[y][x] = 0;
-                }
+                fieldOfGame[y][x] = 0;
             }
         }
     }
 }
 
-function canFigureMoveRight() {
-    for (let y = 0; y < fieldOfGame.length; y++) {
-        for (let x = 0; x < fieldOfGame[y].length; x++) {
-            if (fieldOfGame[y][x] === 1) {
-                if (x === fieldOfGame[y].length - 1 || fieldOfGame[y][x + 1] === -1) {
-                    return false;
-                }
-            }
-        }
-    }
+function addActiveFigure() {
+    removePreviousActiveFigure();
 
-    return true;
-}
-
-function moveFigureRight() {
-    if (canFigureMoveRight()) {
-        for (let y = fieldOfGame.length - 1; y >= 0; y--) {
-            for (let x = fieldOfGame[y].length - 1; x >= 0; x--) {
-                if (fieldOfGame[y][x] === 1) {
-                    fieldOfGame[y][x + 1] = 1;
-                    fieldOfGame[y][x] = 0;
-                }
+    for (let y = 0; y < activeFigure.shape.length; y++) {
+        for (let x = 0; x < activeFigure.shape[y].length; x++) {
+            if (activeFigure.shape[y][x]) {
+                fieldOfGame[activeFigure.y + y][activeFigure.x + x] =
+                    activeFigure.shape[y][x];
             }
         }
     }
 }
 
-function canFigureMoveDown() {
-    for (let y = 0; y < fieldOfGame.length; y++) {
-        for (let x = 0; x < fieldOfGame[y].length; x++) {
-            if (fieldOfGame[y][x] === 1) {
-                if (y === fieldOfGame.length - 1 || fieldOfGame[y + 1][x] === -1) {
-                    return false;
-                }
+function hasCollisions() {
+    for (let y = 0; y < activeFigure.shape.length; y++) {
+        for (let x = 0; x < activeFigure.shape[y].length; x++) {
+            if (
+                activeFigure.shape[y][x]
+                && (fieldOfGame[activeFigure.y + y] === undefined
+                    || fieldOfGame[activeFigure.y + y][activeFigure.x + x] === undefined
+                    || fieldOfGame[activeFigure.y + y][activeFigure.x + x] === -1)
+
+            ) {
+                return true;
             }
         }
     }
 
-    return true;
-}
-
-function moveFigureDown() {
-    if (canFigureMoveDown()) {
-        for (let y = fieldOfGame.length - 1; y >= 0; y--) {
-            for (let x = 0; x < fieldOfGame[y].length; x++) {
-                if (fieldOfGame[y][x] === 1) {
-                    fieldOfGame[y + 1][x] = 1;
-                    fieldOfGame[y][x] = 0;
-                }
-            }
-        }
-    } else {
-        fixFigure();
-    }
+    return false;
 }
 
 function fixFigure() {
@@ -134,9 +102,6 @@ function fixFigure() {
     }
 
     removeFullLines();
-
-    fieldOfGame[0] = [0, 0, 0, 0, 1, 1, 0, 0, 0, 0];
-    fieldOfGame[1] = [0, 0, 0, 0, 1, 1, 0, 0, 0, 0];
 }
 
 function removeFullLines() {
@@ -159,23 +124,29 @@ function removeFullLines() {
     }
 }
 
-function startGame() {
-    moveFigureDown()
-    drawField()
-    setTimeout(startGame, gameSpeed);
-}
-
 document.onkeydown = (event) => {
     if (event.keyCode === 37) {
-        moveFigureLeft();
+        activeFigure.x -= 1;
+        if (hasCollisions()) {
+            activeFigure.x += 1;
+        }
     } else if (event.keyCode === 39) {
-        moveFigureRight();
+        activeFigure.x += 1;
+        if (hasCollisions()) {
+            activeFigure.x -= 1;
+        }
     } else if (event.keyCode === 40) {
-        moveFigureDown();
+        activeFigure.y += 1;
+        if (hasCollisions()) {
+            activeFigure.y -= 1;
+            fixFigure();
+            activeFigure.y = 0;
+        }
     }
 
+    addActiveFigure();
     drawField();
 }
 
+addActiveFigure();
 drawField();
-setTimeout(startGame, gameSpeed);
