@@ -74,6 +74,21 @@ function addActiveFigure() {
     }
 }
 
+function rotateActiveFigure() {
+    const previousFigureState = activeFigure.shape;
+
+    activeFigure.shape = activeFigure.shape[0].map(
+        (val, index) =>
+            activeFigure.shape.map(
+                row => row[index]
+            ).reverse()
+    );
+
+    if (hasCollisions()) {
+        activeFigure.shape = previousFigureState;
+    }
+}
+
 function hasCollisions() {
     for (let y = 0; y < activeFigure.shape.length; y++) {
         for (let x = 0; x < activeFigure.shape[y].length; x++) {
@@ -124,24 +139,30 @@ function removeFullLines() {
     }
 }
 
+function moveFigureDown() {
+    activeFigure.y += 1;
+    if (hasCollisions()) {
+        activeFigure.y -= 1;
+        fixFigure();
+        activeFigure.y = 0;
+    }
+}
+
 document.onkeydown = (event) => {
     if (event.keyCode === 37) {
         activeFigure.x -= 1;
         if (hasCollisions()) {
             activeFigure.x += 1;
         }
+    } else if (event.keyCode === 38) {
+        rotateActiveFigure();
     } else if (event.keyCode === 39) {
         activeFigure.x += 1;
         if (hasCollisions()) {
             activeFigure.x -= 1;
         }
     } else if (event.keyCode === 40) {
-        activeFigure.y += 1;
-        if (hasCollisions()) {
-            activeFigure.y -= 1;
-            fixFigure();
-            activeFigure.y = 0;
-        }
+        moveFigureDown();
     }
 
     addActiveFigure();
@@ -150,3 +171,12 @@ document.onkeydown = (event) => {
 
 addActiveFigure();
 drawField();
+
+function startGame() {
+    moveFigureDown();
+    addActiveFigure();
+    drawField();
+    setTimeout(startGame, gameSpeed);
+}
+
+setTimeout(startGame, gameSpeed);
