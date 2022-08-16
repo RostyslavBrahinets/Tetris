@@ -1,43 +1,7 @@
-let main = document.querySelector(".main");
-
+const main = document.querySelector(".main");
 const lengthOfField = 10;
 
-let fieldOfGame = [
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-];
-
-let gameSpeed = 400;
-
-let activeFigure = {
-    x: 0,
-    y: 0,
-    shape: [
-        [1, 1, 1],
-        [0, 1, 0],
-        [0, 0, 0]
-    ]
-};
-
-let figures = [
+const figures = [
     [
         [1, 1],
         [1, 1]
@@ -75,6 +39,41 @@ let figures = [
     ]
 ];
 
+let fieldOfGame = [
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+];
+
+let gameSpeed = 400;
+
+let activeFigure = {
+    x: 0,
+    y: 0,
+    shape: [
+        [1, 1, 1],
+        [0, 1, 0],
+        [0, 0, 0]
+    ]
+};
+
 function drawField() {
     let mainInnerHTML = "";
     for (let y = 0; y < fieldOfGame.length; y++) {
@@ -89,6 +88,24 @@ function drawField() {
         }
     }
     main.innerHTML = mainInnerHTML;
+}
+
+function hasCollisions() {
+    for (let y = 0; y < activeFigure.shape.length; y++) {
+        for (let x = 0; x < activeFigure.shape[y].length; x++) {
+            if (
+                activeFigure.shape[y][x]
+                && (fieldOfGame[activeFigure.y + y] === undefined
+                    || fieldOfGame[activeFigure.y + y][activeFigure.x + x] === undefined
+                    || fieldOfGame[activeFigure.y + y][activeFigure.x + x] === -1)
+
+            ) {
+                return true;
+            }
+        }
+    }
+
+    return false;
 }
 
 function removePreviousActiveFigure() {
@@ -127,24 +144,6 @@ function rotateActiveFigure() {
     if (hasCollisions()) {
         activeFigure.shape = previousFigureState;
     }
-}
-
-function hasCollisions() {
-    for (let y = 0; y < activeFigure.shape.length; y++) {
-        for (let x = 0; x < activeFigure.shape[y].length; x++) {
-            if (
-                activeFigure.shape[y][x]
-                && (fieldOfGame[activeFigure.y + y] === undefined
-                    || fieldOfGame[activeFigure.y + y][activeFigure.x + x] === undefined
-                    || fieldOfGame[activeFigure.y + y][activeFigure.x + x] === -1)
-
-            ) {
-                return true;
-            }
-        }
-    }
-
-    return false;
 }
 
 function fixFigure() {
@@ -195,19 +194,27 @@ function moveFigureDown() {
     }
 }
 
+function moveFigureLeft() {
+    activeFigure.x -= 1;
+    if (hasCollisions()) {
+        activeFigure.x += 1;
+    }
+}
+
+function moveFigureRight() {
+    activeFigure.x += 1;
+    if (hasCollisions()) {
+        activeFigure.x -= 1;
+    }
+}
+
 document.onkeydown = (event) => {
     if (event.keyCode === 37) {
-        activeFigure.x -= 1;
-        if (hasCollisions()) {
-            activeFigure.x += 1;
-        }
+        moveFigureLeft();
     } else if (event.keyCode === 38) {
         rotateActiveFigure();
     } else if (event.keyCode === 39) {
-        activeFigure.x += 1;
-        if (hasCollisions()) {
-            activeFigure.x -= 1;
-        }
+        moveFigureRight();
     } else if (event.keyCode === 40) {
         moveFigureDown();
     }
@@ -216,9 +223,6 @@ document.onkeydown = (event) => {
     drawField();
 }
 
-addActiveFigure();
-drawField();
-
 function startGame() {
     moveFigureDown();
     addActiveFigure();
@@ -226,4 +230,6 @@ function startGame() {
     setTimeout(startGame, gameSpeed);
 }
 
+addActiveFigure();
+drawField();
 setTimeout(startGame, gameSpeed);
