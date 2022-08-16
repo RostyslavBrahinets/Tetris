@@ -1,5 +1,7 @@
 let main = document.querySelector(".main");
 
+const lengthOfField = 10;
+
 let fieldOfGame = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -35,6 +37,44 @@ let activeFigure = {
     ]
 };
 
+let figures = [
+    [
+        [1, 1],
+        [1, 1]
+    ],
+    [
+        [0, 1, 0, 0],
+        [0, 1, 0, 0],
+        [0, 1, 0, 0],
+        [0, 1, 0, 0]
+    ],
+    [
+        [0, 1, 1],
+        [1, 1, 0],
+        [0, 0, 0]
+    ],
+    [
+        [1, 1, 0],
+        [0, 1, 1],
+        [0, 0, 0]
+    ],
+    [
+        [0, 0, 1],
+        [1, 1, 1],
+        [0, 0, 0]
+    ],
+    [
+        [1, 0, 0],
+        [1, 1, 1],
+        [0, 0, 0]
+    ],
+    [
+        [1, 1, 1],
+        [0, 1, 0],
+        [0, 0, 0]
+    ]
+];
+
 function drawField() {
     let mainInnerHTML = "";
     for (let y = 0; y < fieldOfGame.length; y++) {
@@ -66,7 +106,7 @@ function addActiveFigure() {
 
     for (let y = 0; y < activeFigure.shape.length; y++) {
         for (let x = 0; x < activeFigure.shape[y].length; x++) {
-            if (activeFigure.shape[y][x]) {
+            if (activeFigure.shape[y][x] === 1) {
                 fieldOfGame[activeFigure.y + y][activeFigure.x + x] =
                     activeFigure.shape[y][x];
             }
@@ -139,11 +179,18 @@ function removeFullLines() {
     }
 }
 
+function getNewRandomFigure() {
+    const randomIndex = Math.floor(Math.random() * figures.length);
+    return figures[randomIndex];
+}
+
 function moveFigureDown() {
     activeFigure.y += 1;
     if (hasCollisions()) {
         activeFigure.y -= 1;
         fixFigure();
+        activeFigure.shape = getNewRandomFigure();
+        activeFigure.x = Math.floor((lengthOfField - activeFigure.shape[0].length) / 2);
         activeFigure.y = 0;
     }
 }
