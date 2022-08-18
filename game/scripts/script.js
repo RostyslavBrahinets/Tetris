@@ -1,4 +1,6 @@
 const main = document.querySelector(".main");
+const score = document.querySelector("#score");
+
 const lengthOfField = 10;
 
 const figures = [
@@ -63,6 +65,7 @@ let fieldOfGame = [
 ];
 
 let gameSpeed = 400;
+let scoreCounter = 0;
 
 let activeFigure = {
     x: 0,
@@ -160,6 +163,7 @@ function fixFigure() {
 
 function removeFullLines() {
     let canRemoveLine = true;
+    let removedLines = 0;
 
     for (let y = 0; y < fieldOfGame.length; y++) {
         for (let x = 0; x < fieldOfGame[y].length; x++) {
@@ -172,10 +176,30 @@ function removeFullLines() {
         if (canRemoveLine) {
             fieldOfGame.splice(y, 1);
             fieldOfGame.splice(0, 0, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+            removedLines += 1;
         }
 
         canRemoveLine = true;
     }
+
+    let bonus = 0;
+    switch (removedLines) {
+        case 1:
+            bonus = 1;
+            break;
+        case 2:
+            bonus = 3;
+            break;
+        case 3:
+            bonus = 6;
+            break;
+        case 4:
+            bonus = 12;
+            break;
+    }
+
+    scoreCounter += 10 * bonus;
+    score.innerHTML = scoreCounter;
 }
 
 function getNewRandomFigure() {
