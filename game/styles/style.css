@@ -5,12 +5,14 @@
 body {
     margin: 0;
     background: #000000;
+    color: #FFFFFF;
+    font-family: Arial, sans-serif;
 }
 
 .main {
     width: 320px;
     height: 620px;
-    margin: 100px auto 0;
+    margin: 20px auto 0;
     border: 10px solid #FFFFFF;
     font-size: 0;
 }
