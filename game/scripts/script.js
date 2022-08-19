@@ -210,6 +210,9 @@ function removeFullLines() {
     if (scoreCounter >= parametersOfGame.nextLevelScore) {
         currentLevel++;
         level.innerHTML = currentLevel;
+        parametersOfGame.scorePerLine += 5;
+        parametersOfGame.speed -= 50;
+        parametersOfGame.nextLevelScore *= 2;
     }
 }
 
