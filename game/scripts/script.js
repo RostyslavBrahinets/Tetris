@@ -1,5 +1,6 @@
 const main = document.querySelector(".main");
 const score = document.querySelector("#score");
+const level = document.querySelector("#level");
 
 const lengthOfField = 10;
 
@@ -64,8 +65,13 @@ let fieldOfGame = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 ];
 
-let gameSpeed = 400;
 let scoreCounter = 0;
+let currentLevel = 1;
+let parametersOfGame = {
+    scorePerLine: 10,
+    speed: 400,
+    nextLevelScore: 50
+};
 
 let activeFigure = {
     x: 0,
@@ -198,8 +204,13 @@ function removeFullLines() {
             break;
     }
 
-    scoreCounter += 10 * bonus;
+    scoreCounter += parametersOfGame.scorePerLine * bonus;
     score.innerHTML = scoreCounter;
+
+    if (scoreCounter >= parametersOfGame.nextLevelScore) {
+        currentLevel++;
+        level.innerHTML = currentLevel;
+    }
 }
 
 function getNewRandomFigure() {
@@ -251,9 +262,9 @@ function startGame() {
     moveFigureDown();
     addActiveFigure();
     drawField();
-    setTimeout(startGame, gameSpeed);
+    setTimeout(startGame, parametersOfGame.speed);
 }
 
 addActiveFigure();
 drawField();
-setTimeout(startGame, gameSpeed);
+setTimeout(startGame, parametersOfGame.speed);
