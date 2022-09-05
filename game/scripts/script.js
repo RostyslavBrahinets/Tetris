@@ -73,15 +73,7 @@ let parametersOfGame = {
     nextLevelScore: 50
 };
 
-let activeFigure = {
-    x: 0,
-    y: 0,
-    shape: [
-        [1, 1, 1],
-        [0, 1, 0],
-        [0, 0, 0]
-    ]
-};
+let activeFigure = getNewRandomFigure();
 
 function drawField() {
     let mainInnerHTML = "";
@@ -218,7 +210,13 @@ function removeFullLines() {
 
 function getNewRandomFigure() {
     const randomIndex = Math.floor(Math.random() * figures.length);
-    return figures[randomIndex];
+    const figure = figures[randomIndex];
+
+    return {
+        x: Math.floor((lengthOfField - figure[0].length) / 2),
+        y: 0,
+        shape: figure
+    };
 }
 
 function moveFigureDown() {
@@ -226,9 +224,7 @@ function moveFigureDown() {
     if (hasCollisions()) {
         activeFigure.y -= 1;
         fixFigure();
-        activeFigure.shape = getNewRandomFigure();
-        activeFigure.x = Math.floor((lengthOfField - activeFigure.shape[0].length) / 2);
-        activeFigure.y = 0;
+        activeFigure = getNewRandomFigure();
     }
 }
 
