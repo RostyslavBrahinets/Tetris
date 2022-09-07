@@ -242,6 +242,16 @@ function moveFigureRight() {
     }
 }
 
+function dropFigure() {
+    for (let y = activeFigure.y; y < fieldOfGame.length; y++) {
+        activeFigure.y += 1;
+        if (hasCollisions()) {
+            activeFigure.y -= 1;
+            break;
+        }
+    }
+}
+
 document.onkeydown = (event) => {
     if (event.keyCode === 37) {
         moveFigureLeft();
@@ -251,6 +261,8 @@ document.onkeydown = (event) => {
         moveFigureRight();
     } else if (event.keyCode === 40) {
         moveFigureDown();
+    } else if (event.keyCode === 32) {
+        dropFigure();
     }
 
     addActiveFigure();
