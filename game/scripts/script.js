@@ -1,6 +1,7 @@
 const main = document.querySelector(".main");
 const score = document.querySelector("#score");
 const level = document.querySelector("#level");
+const figure = document.querySelector("#next-figure");
 
 const lengthOfField = 10;
 
@@ -53,6 +54,7 @@ let parametersOfGame = {
 };
 
 let activeFigure = getNewRandomFigure();
+let nextFigure = getNewRandomFigure();
 
 function drawField() {
     let mainInnerHTML = "";
@@ -68,6 +70,21 @@ function drawField() {
         }
     }
     main.innerHTML = mainInnerHTML;
+}
+
+function drawNextFigure() {
+    let nextFigureInnerHTML = "";
+    for (let y = 0; y < nextFigure.shape.length; y++) {
+        for (let x = 0; x < nextFigure.shape[y].length; x++) {
+            if (nextFigure.shape[y][x] === 1) {
+                nextFigureInnerHTML += "<div class='cell movingCell'></div>";
+            } else {
+                nextFigureInnerHTML += "<div class='cell'></div>";
+            }
+        }
+        nextFigureInnerHTML += "<br/>"
+    }
+    figure.innerHTML = nextFigureInnerHTML;
 }
 
 function hasCollisions() {
@@ -203,7 +220,9 @@ function moveFigureDown() {
     if (hasCollisions()) {
         activeFigure.y -= 1;
         fixFigure();
-        activeFigure = getNewRandomFigure();
+        activeFigure = nextFigure;
+        nextFigure = getNewRandomFigure();
+        drawNextFigure();
     }
 }
 
