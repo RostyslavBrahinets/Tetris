@@ -222,6 +222,11 @@ function moveFigureDown() {
         fixFigure();
         activeFigure = nextFigure;
         nextFigure = getNewRandomFigure();
+
+        if (hasCollisions()) {
+            alert("Game Over")
+        }
+
         drawNextFigure();
     }
 }
