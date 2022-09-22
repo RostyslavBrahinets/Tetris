@@ -2,6 +2,7 @@ const main = document.querySelector(".main");
 const score = document.querySelector("#score");
 const level = document.querySelector("#level");
 const figure = document.querySelector("#next-figure");
+const pauseButton = document.querySelector("#pause");
 
 const lengthOfField = 10;
 
@@ -45,6 +46,7 @@ const figures = [
 
 let fieldOfGame = Array(20).fill(Array(10)).fill(0);
 
+let isPaused = false;
 let scoreCounter = 0;
 let currentLevel = 1;
 let parametersOfGame = {
@@ -256,26 +258,43 @@ function dropFigure() {
 }
 
 document.onkeydown = (event) => {
-    if (event.keyCode === 37) {
-        moveFigureLeft();
-    } else if (event.keyCode === 38) {
-        rotateActiveFigure();
-    } else if (event.keyCode === 39) {
-        moveFigureRight();
-    } else if (event.keyCode === 40) {
-        moveFigureDown();
-    } else if (event.keyCode === 32) {
-        dropFigure();
-    }
+    if (!isPaused) {
+        if (event.keyCode === 37) {
+            moveFigureLeft();
+        } else if (event.keyCode === 38) {
+            rotateActiveFigure();
+        } else if (event.keyCode === 39) {
+            moveFigureRight();
+        } else if (event.keyCode === 40) {
+            moveFigureDown();
+        } else if (event.keyCode === 32) {
+            dropFigure();
+        }
 
-    addActiveFigure();
-    drawField();
+        addActiveFigure();
+        drawField();
+    }
 }
 
+pauseButton.addEventListener("click",
+    (event) => {
+        if (event.target.innerHTML === "Pause") {
+            event.target.innerHTML = "Resume";
+        } else {
+            event.target.innerHTML = "Pause";
+        }
+
+        isPaused = !isPaused;
+    }
+);
+
 function startGame() {
-    moveFigureDown();
-    addActiveFigure();
-    drawField();
+    if (!isPaused) {
+        moveFigureDown();
+        addActiveFigure();
+        drawField();
+    }
+
     setTimeout(startGame, parametersOfGame.speed);
 }
 
