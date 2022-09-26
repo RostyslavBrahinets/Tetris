@@ -44,7 +44,7 @@ const figures = [
     ]
 ];
 
-let fieldOfGame = Array(20).fill(Array(10)).fill(0);
+let fieldOfGame = Array.from(Array(20), () => new Array(10).fill(0));
 
 let isPaused = false;
 let scoreCounter = 0;
@@ -60,6 +60,7 @@ let nextFigure = getNewRandomFigure();
 
 function drawField() {
     let mainInnerHTML = "";
+
     for (let y = 0; y < fieldOfGame.length; y++) {
         for (let x = 0; x < fieldOfGame[y].length; x++) {
             if (fieldOfGame[y][x] === 1) {
@@ -71,6 +72,7 @@ function drawField() {
             }
         }
     }
+
     main.innerHTML = mainInnerHTML;
 }
 
@@ -226,10 +228,8 @@ function moveFigureDown() {
         nextFigure = getNewRandomFigure();
 
         if (hasCollisions()) {
-            alert("Game Over")
+            alert("Game Over");
         }
-
-        drawNextFigure();
     }
 }
 
@@ -257,23 +257,33 @@ function dropFigure() {
     }
 }
 
-document.onkeydown = (event) => {
+function startGame() {
     if (!isPaused) {
-        if (event.keyCode === 37) {
-            moveFigureLeft();
-        } else if (event.keyCode === 38) {
-            rotateActiveFigure();
-        } else if (event.keyCode === 39) {
-            moveFigureRight();
-        } else if (event.keyCode === 40) {
-            moveFigureDown();
-        } else if (event.keyCode === 32) {
-            dropFigure();
-        }
-
+        moveFigureDown();
         addActiveFigure();
         drawField();
+        drawNextFigure();
     }
+
+    setTimeout(startGame, parametersOfGame.speed);
+}
+
+document.onkeydown = (event) => {
+    if (event.keyCode === 37) {
+        moveFigureLeft();
+    } else if (event.keyCode === 38) {
+        rotateActiveFigure();
+    } else if (event.keyCode === 39) {
+        moveFigureRight();
+    } else if (event.keyCode === 40) {
+        moveFigureDown();
+    } else if (event.keyCode === 32) {
+        dropFigure();
+    }
+
+    addActiveFigure();
+    drawField();
+    drawNextFigure();
 }
 
 pauseButton.addEventListener("click",
@@ -288,16 +298,7 @@ pauseButton.addEventListener("click",
     }
 );
 
-function startGame() {
-    if (!isPaused) {
-        moveFigureDown();
-        addActiveFigure();
-        drawField();
-    }
+score.innerHTML = scoreCounter;
+level.innerHTML = currentLevel;
 
-    setTimeout(startGame, parametersOfGame.speed);
-}
-
-addActiveFigure();
 drawField();
-setTimeout(startGame, parametersOfGame.speed);
