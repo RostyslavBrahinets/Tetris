@@ -2,6 +2,7 @@ const main = document.querySelector(".main");
 const score = document.querySelector("#score");
 const level = document.querySelector("#level");
 const figure = document.querySelector("#next-figure");
+const startButton = document.querySelector("#start");
 const pauseButton = document.querySelector("#pause");
 
 const lengthOfField = 10;
@@ -46,6 +47,7 @@ const figures = [
 
 let fieldOfGame = Array.from(Array(20), () => new Array(10).fill(0));
 
+let isStarted = false;
 let isPaused = false;
 let scoreCounter = 0;
 let currentLevel = 1;
@@ -269,32 +271,45 @@ function startGame() {
 }
 
 document.onkeydown = (event) => {
-    if (event.keyCode === 37) {
-        moveFigureLeft();
-    } else if (event.keyCode === 38) {
-        rotateActiveFigure();
-    } else if (event.keyCode === 39) {
-        moveFigureRight();
-    } else if (event.keyCode === 40) {
-        moveFigureDown();
-    } else if (event.keyCode === 32) {
-        dropFigure();
-    }
+    if (!isPaused && isStarted) {
+        if (event.keyCode === 37) {
+            moveFigureLeft();
+        } else if (event.keyCode === 38) {
+            rotateActiveFigure();
+        } else if (event.keyCode === 39) {
+            moveFigureRight();
+        } else if (event.keyCode === 40) {
+            moveFigureDown();
+        } else if (event.keyCode === 32) {
+            dropFigure();
+        }
 
-    addActiveFigure();
-    drawField();
-    drawNextFigure();
+        addActiveFigure();
+        drawField();
+        drawNextFigure();
+    }
 }
 
 pauseButton.addEventListener("click",
     (event) => {
-        if (event.target.innerHTML === "Pause") {
-            event.target.innerHTML = "Resume";
-        } else {
-            event.target.innerHTML = "Pause";
-        }
+        if (isStarted) {
+            if (event.target.innerHTML === "Pause") {
+                event.target.innerHTML = "Resume";
+            } else {
+                event.target.innerHTML = "Pause";
+            }
 
-        isPaused = !isPaused;
+            isPaused = !isPaused;
+        }
+    }
+);
+
+startButton.addEventListener("click",
+    () => {
+        if (!isStarted) {
+            setTimeout(startGame, parametersOfGame.speed);
+            isStarted = !isStarted;
+        }
     }
 );
 
