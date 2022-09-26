@@ -9,13 +9,6 @@ body {
     font-family: Arial, sans-serif;
 }
 
-#game {
-    padding-top: 20px;
-    font-size: 40px;
-    width: 320px;
-    margin: auto;
-}
-
 .main {
     width: 320px;
     height: 620px;
@@ -37,6 +30,13 @@ body {
 
 .fixedCell {
     background-color: #00FF00;
+}
+
+#game {
+    padding-top: 20px;
+    font-size: 40px;
+    width: 320px;
+    margin: auto;
 }
 
 #next-figure {
